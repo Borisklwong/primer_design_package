@@ -11,3 +11,13 @@ test_that("getBreakJunctionFlankingSeq", {
     c("AT", "GA", "TT", "AT"))
 
 })
+
+test_that("extends past contig bounds", {
+  gr = GRanges(
+    seqnames="chrMT",
+    ranges=IRanges(start=c(5), width=1),
+    strand=c("+"))
+  expect_equal(
+    getBreakJunctionFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
+    c("NNNNNGATCA"))
+})
