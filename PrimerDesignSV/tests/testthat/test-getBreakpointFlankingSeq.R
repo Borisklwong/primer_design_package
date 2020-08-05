@@ -92,12 +92,12 @@ test_that("out of chromosomal bounds", {
   # TODO
   gr = GRanges(
     seqnames="chr1",
-    ranges=IRanges(start=c(50000, 60000), width=1),
+    ranges=IRanges(start=c(500000000, 60000), width=1),
     strand=c("+", "-"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
   expect_equal(
-    getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 5000000000),
+    getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
     c("NNNNNNNNNNNNNNNNNNNN"))
 })
 
