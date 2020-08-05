@@ -1,0 +1,21 @@
+Package: PrimerDesignSV
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Authors@R: 
+    c(person(given = "Boris",
+             family = "Wong",
+             role = c("aut", "cre"),
+             email = "TODO"),
+      person(given = "Cameron",
+             family = "Daniel",
+             role = "aut"))
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+	StructuralVariantAnnotation,
+	BSgenome.Hsapiens.UCSC.hg19
+RoxygenNote: 7.1.1
