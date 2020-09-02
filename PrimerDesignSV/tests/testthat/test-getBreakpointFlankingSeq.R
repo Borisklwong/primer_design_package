@@ -10,11 +10,13 @@ test_that("simple deletion", {
     strand=c("+", "-"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("GATCCTCTATAAATATCACT", "AGTGATATTTATAGAGGATC"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("GATCCTCTATAAATATCACT", "AGTGATATTTATAGAGGATC"))
-
-})
+    target_seq)
+  })
 
 
 test_that("simple duplication", {
@@ -25,10 +27,16 @@ test_that("simple duplication", {
     strand=c("-", "+"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("AACCTGTTTATCATCTTATA","TATAAGATGATAAACAGGTT"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("AACCTGTTTATCATCTTATA","TATAAGATGATAAACAGGTT"))
+    target_seq)
 })
+
+
+
 test_that("inversion-like --", {
   # TODO: test case with both breakends having -ve orientation
   gr = GRanges(
@@ -37,11 +45,14 @@ test_that("inversion-like --", {
     strand=c("-", "-"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("AACCTGTTTAAAATATCACT","AGTGATATTTTAAACAGGTT"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("AACCTGTTTAAAATATCACT","AGTGATATTTTAAACAGGTT"))
-
+    target_seq)
 })
+
 test_that("inversion-like ++", {
   # TODO
   gr = GRanges(
@@ -50,9 +61,13 @@ test_that("inversion-like ++", {
     strand=c("+", "+"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+
+  target_seq = DNAStringSet(c("GATCCTCTATTCATCTTATA","TATAAGATGAATAGAGGATC"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("GATCCTCTATTCATCTTATA","TATAAGATGAATAGAGGATC"))
+    target_seq)
 })
 
 test_that("interchromosomal", {
@@ -63,10 +78,14 @@ test_that("interchromosomal", {
     strand=c("+", "-"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("GATCCTCTATNAGGCTGGCC","GGCCAGCCTNATAGAGGATC"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("GATCCTCTATNAGGCTGGCC","GGCCAGCCTNATAGAGGATC"))
+    target_seq)
 })
+
 
 test_that("with microhomology", {
   # TODO: test case with breakpoint microhomology4
@@ -82,30 +101,36 @@ test_that("with sequence inserted at breakpoint", {
     partner=c("high", "low"),
     insSeq="AATG")
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("GATCCTCTATAATGAAACAGGTTA","TAACCTGTTTCATTATAGAGGATC"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("GATCCTCTATAATGAAACAGGTTA","TAACCTGTTTCATTATAGAGGATC"))
-
+    target_seq)
 })
+
 
 test_that("out of chromosomal bounds", {
   # TODO
   gr = GRanges(
     seqnames="chr1",
-    ranges=IRanges(start=c(500000000, 60000), width=1),
+    #seqlengths is chr1 1 is 249250621
+    ranges=IRanges(start=c(249250620, 60000), width=1),
     strand=c("+", "-"),
     partner=c("high", "low"))
   names(gr)=c("low", "high")
+
+  target_seq = DNAStringSet(c("NNNNNNNNNNAAATATCACT","AGTGATATTTNNNNNNNNNN"))
+  names(target_seq) = c("low", "high")
   expect_equal(
     getBreakpointFlankingSeq(gr, BSgenome.Hsapiens.UCSC.hg19, flank.length = 10),
-    c("NNNNNNNNNNNNNNNNNNNN"))
+    target_seq)
 })
 
 
+
 #test across mtSeq, sex chr, partly out of bounds
-
-
-
+getSeq(BSgenome.Hsapiens.UCSC.hg19, "chr1", start = 249250620, width = 3)
 ###################
 #2 pairs
 
